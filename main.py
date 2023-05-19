@@ -14,7 +14,7 @@ flip = True
 min_conf = 0.75
 max_hands = 2
 # Path of trained model. Can be changed to point to a custom model
-model_path = os.path.join(current_path, 'models/models10.pt')
+model_path = os.path.join(current_path, 'models2/models10.pt')
 # Pen parameters
 pen_color = (255, 0, 0)
 eraser_size = 80

@@ -1,6 +1,7 @@
 import torch
+import torch.nn as nn
 
-class Model(torch.nn.Module):
+class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
         self.layers = torch.nn.Sequential(
@@ -32,5 +33,5 @@ class Model(torch.nn.Module):
 def test():
     model = Model()
     noise = torch.randn((20, 63))
-    out = model.forward(noise)
+    out = model(noise)
     print(out.shape)

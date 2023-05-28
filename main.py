@@ -116,9 +116,9 @@ action_map = {0: 'Draw', 1: 'Erase', 2: 'None'}
 
 ## cv2 text parameters
 font = cv2.FONT_HERSHEY_SIMPLEX
-fontScale = 1
+fontScale = .5
 fontColor = (255, 255, 255)
-lineType = 4
+lineType = 1
 ## Stores previously drawn circles to give continous lines and also store current color and size of pen
 circles = []
 
@@ -135,7 +135,7 @@ while True:
     h, w, c = frame.shape
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
-    cv2.rectangle(frame, (w, h), (w - 320, h - 90), (0, 0, 0), -1, 1)
+    cv2.rectangle(frame, (w, h), (w - 150, h - 70), (0, 0, 0), -1, 1)
     b = cv2.getTrackbarPos('Blue', 'control')
     g = cv2.getTrackbarPos('Green', 'control')
     r = cv2.getTrackbarPos('Red', 'control')
@@ -146,7 +146,7 @@ while True:
     intermediate_step_gap = imd_step_gap
     if not results.multi_hand_landmarks:
         was_drawing_last_frame = False
-        cv2.putText(frame, 'No hand in frame', (w - 300, h - 50), font, fontScale, fontColor, lineType)
+        cv2.putText(frame, 'No hand in frame', (w - 150, h - 50), font, fontScale, fontColor, lineType)
     else:
         for hand_landmarks in results.multi_hand_landmarks:
             mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
@@ -155,7 +155,7 @@ while True:
             landmark_list = landmark_extract(hand_landmarks, mpHands)
             model_input = torch.tensor(landmark_list, dtype=torch.float).unsqueeze(0)
             action = action_map[torch.argmax(model.forward(model_input)).item()]
-            cv2.putText(frame, f"Mode : {action}", (w - 300, h - 50), font, fontScale, fontColor, lineType)
+            cv2.putText(frame, f"Mode : {action}", (w - 150, h - 50), font, fontScale, fontColor, lineType)
 
             ## Draw mode
             if action == 'Draw':
@@ -210,7 +210,7 @@ while True:
     ctime = time.time()
     fps = round(1 / (ctime - ptime), 2)
     ptime = ctime
-    cv2.putText(frame, f'FPS : {fps}', (w - 300, h - 20), font, fontScale, fontColor, lineType)
+    cv2.putText(frame, f'FPS : {fps}', (w - 150, h - 20), font, fontScale, fontColor, lineType)
 
     cv2.imshow('output', frame)
     # contol_image = img[:80, :]
@@ -219,6 +219,10 @@ while True:
     cv2.imshow('control', img)
     img[:80, :] = [255, 255, 255]
     img[80:, :] = [b, g, r]
+
+    if cv2.waitKey(1) and 0xFF == ord('q'):
+        break
+
 
     if cv2.waitKey(1) and 0xFF == ord('q'):
         break
